@@ -106,7 +106,19 @@ app.get('/test', (req: Request, res: Response) => {
 })
 
 app.get('/events', (req, res) => {
-  res.json(events)
+  if (req.query.category) {
+    const category = req.query.category
+    const filteredEvents = events.filter((event) => event.category === category)
+    res.json(filteredEvents)
+  } else if (req.query.title) {
+    const title = req.query.title as string
+    const filteredEvents = events.filter((event) =>
+      event.title.startsWith(title)
+    )
+    res.json(filteredEvents)
+  } else {
+    res.json(events)
+  }
 })
 
 app.listen(port, () => {
