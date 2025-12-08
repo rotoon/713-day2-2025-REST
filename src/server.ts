@@ -1,8 +1,5 @@
 import express, { Request, Response } from 'express'
 
-const app = express()
-const port = 3000
-
 interface Event {
   id: number
   category: string
@@ -95,6 +92,11 @@ const events: Event[] = [
   },
 ]
 
+const app = express()
+const port = 3000
+
+app.use(express.json())
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
@@ -129,6 +131,21 @@ app.get('/events/:id', (req, res) => {
   } else {
     res.status(404).send('Event not found')
   }
+})
+
+app.post('/events', (req, res) => {
+  const newEvent = req.body
+  if (newEvent.id) {
+    const existingIndex = events.findIndex((event) => event.id === newEvent.id)
+    if (existingIndex !== -1) {
+      events[existingIndex] = newEvent
+      res.json(newEvent)
+      return
+    }
+  }
+  newEvent.id = events.length + 1
+  events.push(newEvent)
+  res.json(newEvent)
 })
 
 app.listen(port, () => {
