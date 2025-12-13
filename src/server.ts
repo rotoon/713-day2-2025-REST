@@ -11,25 +11,25 @@ const port = 3000
 
 app.use(express.json())
 
-app.get('/events', (req, res) => {
+app.get('/events', async (req, res) => {
   if (req.query.category) {
     const category = req.query.category as string
-    const filteredEvents = getEventByCategory(category)
+    const filteredEvents = await getEventByCategory(category)
     res.json(filteredEvents)
   } else if (req.query.title) {
     const title = req.query.title as string
-    const filteredEvents = getAllEvents().filter((event) =>
+    const filteredEvents = (await getAllEvents()).filter((event) =>
       event.title.startsWith(title)
     )
     res.json(filteredEvents)
   } else {
-    res.json(getAllEvents())
+    res.json(await getAllEvents())
   }
 })
 
-app.get('/events/:id', (req, res) => {
+app.get('/events/:id', async (req, res) => {
   const id = parseInt(req.params.id)
-  const event = getEventById(id)
+  const event = await getEventById(id)
   if (event) {
     res.json(event)
   } else {
@@ -37,14 +37,14 @@ app.get('/events/:id', (req, res) => {
   }
 })
 
-app.post('/events', (req, res) => {
+app.post('/events', async (req, res) => {
   const newEvent = req.body
   if (newEvent.id) {
-    const existingIndex = getAllEvents().findIndex(
+    const existingIndex = (await getAllEvents()).findIndex(
       (event) => event.id === newEvent.id
     )
     if (existingIndex !== -1) {
-      getAllEvents()[existingIndex] = newEvent
+      ;(await getAllEvents())[existingIndex] = newEvent
       res.json(newEvent)
       return
     }
