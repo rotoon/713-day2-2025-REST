@@ -1,5 +1,5 @@
 import type { eventModel as Event } from '../generated/prisma/models/event'
-import * as repo from '../repositoties/EventRepositoryPrisma'
+import * as repo from '../repositories/EventRepositoryPrisma'
 
 export function getEventByCategory(category: string) {
   return repo.getEventByCategory(category)
