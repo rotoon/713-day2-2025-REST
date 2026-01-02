@@ -1,3 +1,5 @@
+import { Organizer } from './Organizer'
+
 export default interface Event {
   id: number
   category: string
@@ -7,5 +9,5 @@ export default interface Event {
   date: string
   time: string
   petsAllowed: boolean
-  organizer: string
+  organizer: Organizer
 }
